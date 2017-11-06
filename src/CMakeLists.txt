@@ -17,7 +17,7 @@ SET (SRCS yajl.c yajl_lex.c yajl_parser.c yajl_buf.c
           yajl_tree.c yajl_version.c
 )
 SET (HDRS yajl_parser.h yajl_lex.h yajl_buf.h yajl_encode.h yajl_alloc.h)
-SET (PUB_HDRS api/yajl_parse.h api/yajl_gen.h api/yajl_common.h api/yajl_tree.h)
+SET (PUB_HDRS include/yajl/yajl_parse.h include/yajl/yajl_gen.h include/yajl/yajl_common.h include/yajl/yajl_tree.h)
 
 # useful when fixing lexer bugs.
 #ADD_DEFINITIONS(-DYAJL_LEXER_DEBUG)
@@ -36,8 +36,10 @@ SET (shareDir ${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/share/pkgconfig)
 SET(LIBRARY_OUTPUT_PATH ${libDir})
 
 ADD_LIBRARY(yajl_s STATIC ${SRCS} ${HDRS} ${PUB_HDRS})
+target_include_directories(yajl_s PUBLIC include)
 
 ADD_LIBRARY(yajl SHARED ${SRCS} ${HDRS} ${PUB_HDRS})
+target_include_directories(yajl PUBLIC include)
 
 #### setup shared library version number
 SET_TARGET_PROPERTIES(yajl PROPERTIES
@@ -60,7 +62,7 @@ FILE(MAKE_DIRECTORY ${incDir})
 
 # generate build-time source
 SET(dollar $)
-CONFIGURE_FILE(api/yajl_version.h.cmake ${incDir}/yajl_version.h)
+CONFIGURE_FILE(include/yajl/yajl_version.h.cmake ${incDir}/yajl_version.h)
 CONFIGURE_FILE(yajl.pc.cmake ${shareDir}/yajl.pc)
 
 # copy public headers to output directory
